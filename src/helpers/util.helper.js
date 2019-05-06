@@ -10,7 +10,7 @@ function badRequest(callback, errors) {
     console.error(errors);
     return callback(null, {
         statusCode: 400,
-        headers: {'Content-Type': 'text/plain'},
+        headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
         body: typeof errors === 'object' ? JSON.stringify(errors) : typeof errors === 'string' ? errors : 'Bad Request',
     })
 }
@@ -23,7 +23,7 @@ function error(callback, errors, code) {
 
     return callback(null, {
         statusCode: errors && errors.statusCode || code || 500,
-        headers: {'Content-Type': 'text/plain'},
+        headers: {"Content-Type": "application/json", 'Access-Control-Allow-Origin': '*'},
         body: errorMSG
     })
 }
@@ -31,6 +31,7 @@ function error(callback, errors, code) {
 function send(callback, data) {
     return callback(null, {
         statusCode: 200,
+        headers: {"Content-Type": "application/json", 'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(data),
     })
 }
