@@ -1,0 +1,28 @@
+{
+  "name": "sweatwork-test",
+  "version": "1.0.0",
+  "description": "Serverless REST API with DynamoDB and offline support",
+  "repository": "",
+  "author": "Alejandro Hernandez <alephoenix1985@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "serverless-express": "^2.0.11",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "start": "sls offline start",
+    "test": "npm-run-all test-local -p -r start",
+    "test-local": "wait-on http://localhost:3000 & sls invoke test",
+    "stop": "pkill -SIGINT sweatwork-test",
+    "deploy-dev": "serverless deploy --stage dev",
+    "deploy-prod": "serverless deploy --stage prod"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.448.0",
+    "npm-run-all": "^4.1.5",
+    "serverless-dynamodb-local": "^0.2.37",
+    "serverless-mocha-plugin": "^1.10.0",
+    "serverless-offline": "^4.9.4",
+    "supertest": "^4.0.2"
+  }
+}

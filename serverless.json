@@ -1,0 +1,228 @@
+{
+  "service": "SLSSWTest",
+  "plugins": [
+    "serverless-dynamodb-local",
+    "serverless-offline",
+    "serverless-express",
+    "serverless-mocha-plugin"
+  ],
+  "custom": {
+    "dynamodb": {
+      "start": {
+        "port": 8000,
+        "inMemory": true,
+        "migrate": true
+      },
+      "migration": {
+        "dir": "migrations"
+      }
+    }
+  },
+  "provider": {
+    "name": "aws",
+    "runtime": "nodejs8.10",
+    "environment": {
+      "STAGE": "${opt:stage, self:provider.stage}",
+      "DYNAMODB_TABLE_AUTHOR": "AUTHOR${self:service}${opt:stage, self:provider.stage}",
+      "DYNAMODB_TABLE_PUBLICATION": "PUBLICATION${self:service}${opt:stage, self:provider.stage}"
+    },
+    "iamRoleStatements": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem"
+        ],
+        "Resource": "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_AUTHOR}"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem"
+        ],
+        "Resource": "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_PUBLICATION}"
+      }
+    ]
+  },
+  "functions": {
+    "authorCreate": {
+      "handler": "src/functions/author.add",
+      "events": [
+        {
+          "http": {
+            "path": "author",
+            "method": "post",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "authorList": {
+      "handler": "src/functions/author.list",
+      "events": [
+        {
+          "http": {
+            "path": "author",
+            "method": "get",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "authorGet": {
+      "handler": "src/functions/author.get",
+      "events": [
+        {
+          "http": {
+            "path": "author/{id}",
+            "method": "get",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "authorUpdate": {
+      "handler": "src/functions/author.update",
+      "events": [
+        {
+          "http": {
+            "path": "author/{id}",
+            "method": "put",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "authorDelete": {
+      "handler": "src/functions/author.remove",
+      "events": [
+        {
+          "http": {
+            "path": "author/{id}",
+            "method": "delete",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "publicationCreate": {
+      "handler": "src/functions/publication.add",
+      "events": [
+        {
+          "http": {
+            "path": "publication",
+            "method": "post",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "publicationList": {
+      "handler": "src/functions/publication.list",
+      "events": [
+        {
+          "http": {
+            "path": "publication",
+            "method": "get",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "publicationGet": {
+      "handler": "src/functions/publication.get",
+      "events": [
+        {
+          "http": {
+            "path": "publication/{id}",
+            "method": "get",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "publicationUpdate": {
+      "handler": "src/functions/publication.update",
+      "events": [
+        {
+          "http": {
+            "path": "publication/{id}",
+            "method": "put",
+            "cors": true
+          }
+        }
+      ]
+    },
+    "publicationDelete": {
+      "handler": "src/functions/publication.remove",
+      "events": [
+        {
+          "http": {
+            "path": "publication/{id}",
+            "method": "delete",
+            "cors": true
+          }
+        }
+      ]
+    }
+  },
+  "resources": {
+    "Resources": {
+      "AuthorDynamoDbTable": {
+        "Type": "AWS::DynamoDB::Table",
+        "DeletionPolicy": "Retain",
+        "Properties": {
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "id",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "id",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+          },
+          "TableName": "${self:provider.environment.DYNAMODB_TABLE_AUTHOR}"
+        }
+      },
+      "PublicationDynamoDbTable": {
+        "Type": "AWS::DynamoDB::Table",
+        "DeletionPolicy": "Retain",
+        "Properties": {
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "id",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "id",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+          },
+          "TableName": "${self:provider.environment.DYNAMODB_TABLE_PUBLICATION}"
+        }
+      }
+    }
+  }
+}

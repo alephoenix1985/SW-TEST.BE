@@ -1,0 +1,18 @@
+{
+  "local": {
+    "accessKeyId": "AWS_KEY_LOCAL",
+    "secretAccessKey": "AWS_SECRET_LOCAL",
+    "region": "localhost",
+    "endpoint": "http://localhost:8000"
+  },
+  "dev": {
+    "accessKeyId": "AWS_KEY_DEV",
+    "secretAccessKey": "AWS_SECRET_DEV",
+    "region": "us-east-1"
+  },
+  "prod": {
+    "accessKeyId": "AWS_KEY_PROD",
+    "secretAccessKey": "AWS_SECRET_PROD",
+    "region": "us-east-1"
+  }
+}
