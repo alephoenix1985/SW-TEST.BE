@@ -17,6 +17,7 @@ Test your service locally, without having to deploy it first.
 
 ```bash
 npm install
+npm install serverless -g
 serverless dynamodb install
 serverless offline start
 ```
