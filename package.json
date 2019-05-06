@@ -7,12 +7,13 @@
   "license": "MIT",
   "dependencies": {
     "serverless-express": "^2.0.11",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "wait-on": "^3.2.0"
   },
   "scripts": {
-    "start": "sls offline start",
-    "test": "npm-run-all test-local -p -r start",
-    "test-local": "wait-on http://localhost:3000 & sls invoke test",
+    "start": "sls offline start --stage dev --quiet>NUL",
+    "test": "run-p test-local start",
+    "test-local": "wait-on http://localhost:3000/author && sls invoke test",
     "stop": "pkill -SIGINT sweatwork-test",
     "deploy-dev": "serverless deploy --stage dev",
     "deploy-prod": "serverless deploy --stage prod"
