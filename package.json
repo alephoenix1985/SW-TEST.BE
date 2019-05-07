@@ -11,7 +11,7 @@
     "wait-on": "^3.2.0"
   },
   "scripts": {
-    "start": "sls offline start --stage dev --quiet>NUL",
+    "start": "sls offline start --stage local --quiet>NUL",
     "test": "run-p test-local start",
     "test-local": "wait-on http://localhost:3000/author && sls invoke test",
     "stop": "pkill -SIGINT sweatwork-test",
